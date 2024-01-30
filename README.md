@@ -28,7 +28,7 @@ Your objective is to write a new API endpoint, POST /one-time-payment, that acce
 
 | One-time Payment Amount | Match |
 |-------------------------|-------|
-| 0 <= x < 10             | 1%    |
+| 0 < x < 10              | 1%    |
 | 10 <= x < 50            | 3%    |
 | X >= 50                 | 5%    |
 

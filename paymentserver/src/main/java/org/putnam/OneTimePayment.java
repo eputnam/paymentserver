@@ -26,7 +26,7 @@ public class OneTimePayment {
     public Response addPayment(OneTimePaymentPostRequest request) {
         double payment = request.getPaymentAmount();
         if(payment <= 0) {
-            return Response.status(Response.Status.BAD_REQUEST).build();
+            return Response.status(Response.Status.BAD_REQUEST).entity("Payment must be greater than 0").build();
         }
 
         double newBalance = calculateNewBalance(payment);

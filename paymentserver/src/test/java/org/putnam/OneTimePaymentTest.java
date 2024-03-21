@@ -72,6 +72,15 @@ public class OneTimePaymentTest {
         assertEquals(Response.Status.OK.getStatusCode(), clientResponse.getStatus());
         assertEquals(79.40, oneTimePaymentPostResponse.getNewBalance());
         assertNotNull(oneTimePaymentPostResponse.getNextDueDate());
+    }
+
+    @Test
+    public void testPaymentLessThanZero() {
+        OneTimePaymentPostRequest request = new OneTimePaymentPostRequest();
+        request.setPaymentAmount(-1);
+
+        Response clientResponse = target.path("one-time-payment").request().post(Entity.entity(request, MediaType.APPLICATION_JSON_TYPE));
+        assertEquals(Response.Status.BAD_REQUEST.getStatusCode(), clientResponse.getStatus());
 
     }
 

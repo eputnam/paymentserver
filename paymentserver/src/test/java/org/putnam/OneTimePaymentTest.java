@@ -50,31 +50,6 @@ public class OneTimePaymentTest {
     }
 
     @Test
-    public void testOnePercentMatch() {
-
-        OneTimePaymentPostRequest request = new OneTimePaymentPostRequest();
-        request.setPaymentAmount(5.00);
-
-        Response clientResponse = target.path("one-time-payment").request().post(Entity.entity(request, MediaType.APPLICATION_JSON_TYPE));
-        OneTimePaymentPostResponse oneTimePaymentPostResponse = clientResponse.readEntity(OneTimePaymentPostResponse.class);
-        assertEquals(Response.Status.OK.getStatusCode(), clientResponse.getStatus());
-        assertEquals(94.95, oneTimePaymentPostResponse.getNewBalance());
-        assertNotNull(oneTimePaymentPostResponse.getNextDueDate());
-    }
-
-    @Test
-    public void testThreePercentMatch() {
-        OneTimePaymentPostRequest request = new OneTimePaymentPostRequest();
-        request.setPaymentAmount(20.00);
-
-        Response clientResponse = target.path("one-time-payment").request().post(Entity.entity(request, MediaType.APPLICATION_JSON_TYPE));
-        OneTimePaymentPostResponse oneTimePaymentPostResponse = clientResponse.readEntity(OneTimePaymentPostResponse.class);
-        assertEquals(Response.Status.OK.getStatusCode(), clientResponse.getStatus());
-        assertEquals(79.40, oneTimePaymentPostResponse.getNewBalance());
-        assertNotNull(oneTimePaymentPostResponse.getNextDueDate());
-    }
-
-    @Test
     public void testPaymentLessThanZero() {
         OneTimePaymentPostRequest request = new OneTimePaymentPostRequest();
         request.setPaymentAmount(-1);

@@ -1,0 +1,10 @@
+## IDE
+.idea/
+.vscode/
+
+## Maven
+target/
+
+## other
+.DS_Store
+

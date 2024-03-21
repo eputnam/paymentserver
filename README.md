@@ -37,3 +37,16 @@ Lastly, no one can have a payment due on a weekend (since that's a great way to 
 For example, imagine someone with a $100 balance that makes a $10 one-time payment on March 14, 2022. They will have a new balance of $89.70 (their $10 payment plus 3% of $10, which is $0.30) and a next payment due date of March 29, 2022.
 
 Similarly, someone with a $500 balance that makes a $75 one-time payment on April 8, 2022 will have a new balance of $421.25 (their $75 payment plus 5% of $75, which is $3.75) and a next payment due date of April 25, 2022.
+
+## Planning
+
+### table steaks (nom nom)
+POST /one-time-payment
+body: { paymentAmount: number }
+
+return: { newBalance: number, nextPaymentDueDate: string }
+
+### dessert
+- matching
+- due date shifting
+

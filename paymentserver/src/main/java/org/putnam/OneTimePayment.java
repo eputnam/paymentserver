@@ -39,7 +39,19 @@ public class OneTimePayment {
 
     private double calculateNewBalance(double payment){
         double currentBalance = 100.00;
-        return currentBalance - payment;
+        return currentBalance - processMatch(payment);
+    }
+
+    private double processMatch(double payment) {
+        if(payment < 10.00) {
+            return payment + (payment * .01);
+        } else if(payment < 50.00) {
+            return payment + (payment * .03);
+        } else if(payment >= 50.00) {
+            return payment + (payment * .05);
+        } else {
+            return payment;
+        }
     }
 
     private String calculateNextDueDate() {

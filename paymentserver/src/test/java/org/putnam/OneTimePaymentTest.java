@@ -7,11 +7,8 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.glassfish.grizzly.http.server.HttpServer;
 
-import org.glassfish.jersey.jackson.internal.jackson.jaxrs.json.JacksonJaxbJsonProvider;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -48,7 +45,34 @@ public class OneTimePaymentTest {
         Response clientResponse = target.path("one-time-payment").request().post(Entity.entity(request, MediaType.APPLICATION_JSON_TYPE));
         OneTimePaymentPostResponse oneTimePaymentPostResponse = clientResponse.readEntity(OneTimePaymentPostResponse.class);
         assertEquals(Response.Status.OK.getStatusCode(), clientResponse.getStatus());
-        assertEquals(50.00, oneTimePaymentPostResponse.getNewBalance());
+        assertEquals(47.50, oneTimePaymentPostResponse.getNewBalance());
         assertNotNull(oneTimePaymentPostResponse.getNextDueDate());
     }
+
+    @Test
+    public void testOnePercentMatch() {
+
+        OneTimePaymentPostRequest request = new OneTimePaymentPostRequest();
+        request.setPaymentAmount(5.00);
+
+        Response clientResponse = target.path("one-time-payment").request().post(Entity.entity(request, MediaType.APPLICATION_JSON_TYPE));
+        OneTimePaymentPostResponse oneTimePaymentPostResponse = clientResponse.readEntity(OneTimePaymentPostResponse.class);
+        assertEquals(Response.Status.OK.getStatusCode(), clientResponse.getStatus());
+        assertEquals(94.95, oneTimePaymentPostResponse.getNewBalance());
+        assertNotNull(oneTimePaymentPostResponse.getNextDueDate());
+    }
+
+    @Test
+    public void testThreePercentMatch() {
+        OneTimePaymentPostRequest request = new OneTimePaymentPostRequest();
+        request.setPaymentAmount(20.00);
+
+        Response clientResponse = target.path("one-time-payment").request().post(Entity.entity(request, MediaType.APPLICATION_JSON_TYPE));
+        OneTimePaymentPostResponse oneTimePaymentPostResponse = clientResponse.readEntity(OneTimePaymentPostResponse.class);
+        assertEquals(Response.Status.OK.getStatusCode(), clientResponse.getStatus());
+        assertEquals(79.40, oneTimePaymentPostResponse.getNewBalance());
+        assertNotNull(oneTimePaymentPostResponse.getNextDueDate());
+
+    }
+
 }

@@ -6,31 +6,33 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-/**
- * Root resource (exposed at "one-time-payment" path)
- */
+/** Root resource (exposed at "one-time-payment" path) */
 @Path("one-time-payment")
 public class OneTimePayment {
 
-    /**
-     *
-     * Consumers can use this endpoint to submit one time payments.
-     *
-     * @return response with new balance and the next due date
-     */
-    @POST
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response addPayment(OneTimePaymentPostRequest request) {
-        double payment = request.getPaymentAmount();
-        if(payment <= 0) {
-            return Response.status(Response.Status.BAD_REQUEST).entity("Payment must be greater than 0").build();
-        }
-
-        double newBalance = OneTimePaymentService.calculateNewBalance(payment);
-        String formattedDueDate = OneTimePaymentService.calculateNextDueDate();
-
-        OneTimePaymentPostResponse response = new OneTimePaymentPostResponse().withNewBalance(newBalance).withNextDueDate(formattedDueDate);
-
-        return Response.status(Response.Status.OK).entity(response).build();
+  /**
+   * Consumers can use this endpoint to submit one time payments.
+   *
+   * @return response with new balance and the next due date
+   */
+  @POST
+  @Produces(MediaType.APPLICATION_JSON)
+  public Response addPayment(OneTimePaymentPostRequest request) {
+    double payment = request.getPaymentAmount();
+    if (payment <= 0) {
+      return Response.status(Response.Status.BAD_REQUEST)
+          .entity("Payment must be greater than 0")
+          .build();
     }
+
+    double newBalance = OneTimePaymentService.calculateNewBalance(payment);
+    String formattedDueDate = OneTimePaymentService.calculateNextDueDate();
+
+    OneTimePaymentPostResponse response =
+        new OneTimePaymentPostResponse()
+            .withNewBalance(newBalance)
+            .withNextDueDate(formattedDueDate);
+
+    return Response.status(Response.Status.OK).entity(response).build();
+  }
 }

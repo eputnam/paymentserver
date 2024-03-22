@@ -4,24 +4,24 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 public class OneTimePaymentService {
-  static public double calculateNewBalance(double payment){
+  public static double calculateNewBalance(double payment) {
     double currentBalance = 100.00;
     return currentBalance - processMatch(payment);
   }
 
   static double processMatch(double payment) {
-    if(payment < 10.00) {
+    if (payment < 10.00) {
       return payment + (payment * .01);
-    } else if(payment < 50.00) {
+    } else if (payment < 50.00) {
       return payment + (payment * .03);
-    } else if(payment >= 50.00) {
+    } else if (payment >= 50.00) {
       return payment + (payment * .05);
     } else {
       return payment;
     }
   }
 
-  static public String calculateNextDueDate() {
+  public static String calculateNextDueDate() {
     LocalDateTime now = LocalDateTime.now();
     LocalDateTime nextDueDate = now.plusDays(15);
 

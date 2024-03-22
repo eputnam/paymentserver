@@ -30,5 +30,4 @@ public class OneTimePaymentPostResponse {
     this.nextDueDate = nextDueDate;
     return this;
   }
-
 }

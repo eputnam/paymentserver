@@ -17,46 +17,50 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public class OneTimePaymentTest {
 
-    private HttpServer server;
-    private WebTarget target;
+  private HttpServer server;
+  private WebTarget target;
 
-    @BeforeEach
-    public void setUp() throws Exception {
-        server = Server.startServer();
-        Client c = ClientBuilder.newClient();
+  @BeforeEach
+  public void setUp() throws Exception {
+    server = Server.startServer();
+    Client c = ClientBuilder.newClient();
 
+    target = c.target(Server.BASE_URI);
+  }
 
-        target = c.target(Server.BASE_URI);
-    }
+  @AfterEach
+  public void tearDown() throws Exception {
+    server.stop();
+  }
 
-    @AfterEach
-    public void tearDown() throws Exception {
-        server.stop();
-    }
+  /** Test to see that the info returned is what we expect */
+  @Test
+  public void testBasicPost() {
+    OneTimePaymentPostRequest request = new OneTimePaymentPostRequest();
+    request.setPaymentAmount(50.00);
 
-    /**
-     * Test to see that the info returned is what we expect
-     */
-    @Test
-    public void testBasicPost() {
-        OneTimePaymentPostRequest request = new OneTimePaymentPostRequest();
-        request.setPaymentAmount(50.00);
+    Response clientResponse =
+        target
+            .path("one-time-payment")
+            .request()
+            .post(Entity.entity(request, MediaType.APPLICATION_JSON_TYPE));
+    OneTimePaymentPostResponse oneTimePaymentPostResponse =
+        clientResponse.readEntity(OneTimePaymentPostResponse.class);
+    assertEquals(Response.Status.OK.getStatusCode(), clientResponse.getStatus());
+    assertEquals(47.50, oneTimePaymentPostResponse.getNewBalance());
+    assertNotNull(oneTimePaymentPostResponse.getNextDueDate());
+  }
 
-        Response clientResponse = target.path("one-time-payment").request().post(Entity.entity(request, MediaType.APPLICATION_JSON_TYPE));
-        OneTimePaymentPostResponse oneTimePaymentPostResponse = clientResponse.readEntity(OneTimePaymentPostResponse.class);
-        assertEquals(Response.Status.OK.getStatusCode(), clientResponse.getStatus());
-        assertEquals(47.50, oneTimePaymentPostResponse.getNewBalance());
-        assertNotNull(oneTimePaymentPostResponse.getNextDueDate());
-    }
+  @Test
+  public void testPaymentLessThanZero() {
+    OneTimePaymentPostRequest request = new OneTimePaymentPostRequest();
+    request.setPaymentAmount(-1);
 
-    @Test
-    public void testPaymentLessThanZero() {
-        OneTimePaymentPostRequest request = new OneTimePaymentPostRequest();
-        request.setPaymentAmount(-1);
-
-        Response clientResponse = target.path("one-time-payment").request().post(Entity.entity(request, MediaType.APPLICATION_JSON_TYPE));
-        assertEquals(Response.Status.BAD_REQUEST.getStatusCode(), clientResponse.getStatus());
-
-    }
-
+    Response clientResponse =
+        target
+            .path("one-time-payment")
+            .request()
+            .post(Entity.entity(request, MediaType.APPLICATION_JSON_TYPE));
+    assertEquals(Response.Status.BAD_REQUEST.getStatusCode(), clientResponse.getStatus());
+  }
 }

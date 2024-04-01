@@ -5,6 +5,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.time.LocalDateTime;
 
 /** Root resource (exposed at "one-time-payment" path) */
 @Path("one-time-payment")
@@ -26,7 +27,8 @@ public class OneTimePayment {
     }
 
     double newBalance = OneTimePaymentService.calculateNewBalance(payment);
-    String formattedDueDate = OneTimePaymentService.calculateNextDueDate();
+    LocalDateTime now = LocalDateTime.now();
+    String formattedDueDate = OneTimePaymentService.calculateNextDueDate(now);
 
     OneTimePaymentPostResponse response =
         new OneTimePaymentPostResponse()

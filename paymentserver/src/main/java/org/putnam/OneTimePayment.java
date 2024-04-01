@@ -28,7 +28,7 @@ public class OneTimePayment {
 
     double newBalance = OneTimePaymentService.calculateNewBalance(payment);
     LocalDateTime now = LocalDateTime.now();
-    String formattedDueDate = OneTimePaymentService.calculateNextDueDate(now);
+    String formattedDueDate = OneTimePaymentService.formattedDueDate(now);
 
     OneTimePaymentPostResponse response =
         new OneTimePaymentPostResponse()
